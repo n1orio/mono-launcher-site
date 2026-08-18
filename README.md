@@ -1,5 +1,51 @@
-# Vue 3 + Vite
+# Mono Launcher — официальный сайт
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Статический SPA (Vue 3 + Vite + Tailwind v4) для лаунчера [Mono Launcher](https://github.com/n1orio/mono-launcher).
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Страницы
+
+- `/` — лендинг: герой, кнопка скачивания, возможности, статистика.
+- `/invite` — приглашение в сборку по глубокой ссылке `mono://add-pack?url=&name=&blog=`.
+  Сюда ведут ссылки-приглашения; страница автоматически открывает лаунчер, а если он
+  не установлен — предлагает скачать.
+- Любой неизвестный путь (в т.ч. старые ссылки вида `?url=...`) — на главную.
+
+## Статистика
+
+Блок «Сообщество` тянет живые счётчики с бэкенда (`GET /stats` → `{ accounts, packs }`).
+При недоступности бэкенда показывает placeholder вместо падения страницы.
+
+**Адрес бэкенда** задаётся через `VITE_API_BASE` (по умолчанию пустой — запросы идут на
+относительные пути, совпадающие с маршрутами бэкенда `/stats`, `/curseforge/*`):
+- в **dev** — dev-сервер Vite проксирует `/stats` и `/curseforge` на `localhost:8080`
+  (см. `vite.config.js`);
+- в **проде** — Caddy проксирует те же пути на бэкенд (см. `deploy/Caddyfile`).
+
+## Разработка
+
+```bash
+npm install
+npm run dev       # http://localhost:5173 (API на localhost:8080)
+npm run build     # → dist/ (статический сайт)
+npm run preview   # превью собранного
+```
+
+## Сборка / деплой
+
+Сайт — статика: собранный `dist/` раздаёт любой веб-сервер (Caddy/Nginx/GitHub Pages).
+Vue собирается локально, на сервере Node не нужен.
+
+## Структура
+
+```
+src/
+  main.js             # точка входа
+  router/index.js     # маршруты (/, /invite, catch-all)
+  App.vue             # навбар + футер + RouterView
+  views/Home.vue      # лендинг
+  views/Invite.vue    # диплинк
+  composables/useStats.js  # загрузка статистики
+  style.css           # дизайн-токены + Tailwind
+public/mono.svg       # логотип (favicon)
+deploy/Caddyfile      # пример конфига для прода
+```

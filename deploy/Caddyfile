@@ -1,0 +1,13 @@
+# Пример конфига Caddy для MonLauncher-сайта + бэкенда на одном сервере.
+# Замените site.ru на ваш домен.
+
+site.ru {
+    # Статика сайта (собранный dist/)
+    root * /var/www/mono-launcher-site
+    try_files {path} /index.html
+    file_server
+
+    # Проксируем маршруты бэкенда на локальный axum (localhost:8080)
+    reverse_proxy /stats* localhost:8080
+    reverse_proxy /curseforge/* localhost:8080
+}
