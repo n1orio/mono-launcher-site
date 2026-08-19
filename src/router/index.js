@@ -4,12 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/Home.vue'),
-  },
-  {
-    path: '/invite',
-    name: 'invite',
-    component: () => import('../views/Invite.vue'),
+    component: () => import('../views/HomeView.vue'),
   },
   // Любой другой путь (глубокие ссылки, старые ?url= форматы) — на главную.
   { path: '/:pathMatch(.*)*', redirect: '/' },
